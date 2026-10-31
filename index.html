@@ -9,19 +9,22 @@
 <script>
 /*
   PASSWORD SCREEN
-  hash is the SHA-256 of "mo-wedding:" + the password in lower case. Leave it empty to turn the gate off.
-  To make one, run this in PowerShell (swap in your password, keep it lower case):
+  Two passwords, two versions of the invitation:
+    day      the whole day: ceremony, dinner and the evening
+    evening  the evening party only
+  Each value is the SHA-256 of "mo-wedding:" + the password in lower case. Leave both empty to turn the gate off.
+  To make one, run this in PowerShell (swap in the password, keep it lower case):
     $b=[Text.Encoding]::UTF8.GetBytes('mo-wedding:yourpassword'); -join ([Security.Cryptography.SHA256]::Create().ComputeHash($b) | % { $_.ToString('x2') })
-  Then paste the result below, and put the same password in ACCESS_CODE in google-apps-script.gs.
+  Then put the same two passwords in ACCESS_CODES in google-apps-script.gs.
   This keeps casual visitors and search engines out. It is not strong security: the page text
   can still be read by anyone who views the source.
 */
-const GATE = { hash: '716eb446537421bcbce35c2f1b5f179a330a1f92131b2e0f0411a28338c81945' };
+const GATE = { day: '716eb446537421bcbce35c2f1b5f179a330a1f92131b2e0f0411a28338c81945', evening: '71226b52fa298137f42141cd8311551ef9db1e6e93580f3258f51ee39839adf5' };
 (function () {
   const r = document.documentElement;
-  if (!GATE.hash) { r.classList.add('gate-open'); return; }
-  let c = ''; try { c = localStorage.getItem('mo-code') || ''; } catch (e) {}
-  if (c) r.classList.add('gate-checking');
+  if (!GATE.day && !GATE.evening) { r.classList.add('gate-open'); return; }
+  let c = '', m = ''; try { c = localStorage.getItem('mo-code') || ''; m = localStorage.getItem('mo-mode') || ''; } catch (e) {}
+  if (c) { r.classList.add('gate-checking'); if (m === 'evening') r.classList.add('evening'); }
 })();
 </script>
 <meta name="description" content="Wedding invitation for Melissa and Oliver, 29 April 2027, St Mary's Guildhall, Coventry.">
@@ -65,6 +68,10 @@ a { color: inherit; }
 :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 .wrap { width: 100%; max-width: 1180px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 .ph { border-bottom: 2px dashed currentColor; font-style: normal; overflow-wrap: anywhere; }
+/* evening guests get a shorter invitation: .day-only is hidden, .eve-only shown */
+.eve-only { display: none; }
+html.evening .eve-only { display: revert; }
+html.evening .day-only { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ---------- password screen ---------- */
@@ -531,19 +538,20 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
     </svg>
 
     <div class="wrap hero-inner">
-      <p class="kicker" data-i18n="kicker">Please join us for the wedding of</p>
+      <p class="kicker day-only" data-i18n="kicker">Please join us for the wedding of</p>
+      <p class="kicker eve-only" data-i18n="kickerPm">Please join us in the evening to celebrate the wedding of</p>
       <h1 class="names" aria-label="Melissa and Oliver" data-i18n-aria="aNames"><span class="n1" aria-hidden="true">Melissa</span><span class="n2" aria-hidden="true"><em>&amp;</em>Oliver</span></h1>
       <p class="when"><span data-i18n="date" style="display:inline;font:inherit;margin:0">Thursday 29 April 2027</span><span><a class="gmap" href="https://www.google.com/maps/search/?api=1&amp;query=St+Mary%27s+Guildhall%2C+Bayley+Lane%2C+Coventry+CV1+5RN" target="_blank" rel="noopener">St Mary's Guildhall, Coventry</a></span></p>
       <p class="count" id="count"></p>
     </div>
     <p class="cue" id="cue" data-i18n="cue">Scroll to follow the path</p>
-    <div class="node start" data-node data-t="0"></div>
+    <div class="node start" data-node data-t="0" data-t-eve="2.5"></div>
   </section>
 
   <main class="stops wrap" id="stops">
 
     <!-- 1. CEREMONY -->
-    <section class="stop stop--l" id="ceremony" aria-labelledby="h-cer">
+    <section class="stop stop--l day-only" id="ceremony" aria-labelledby="h-cer">
       <div class="node" data-node data-t="1"></div>
       <div class="pw" aria-hidden="true">
         <svg viewBox="0 0 260 230">
@@ -575,7 +583,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
     </section>
 
     <!-- 2. EVERYONE MEETS -->
-    <section class="stop stop--r" id="meet" aria-labelledby="h-meet">
+    <section class="stop stop--r day-only" id="meet" aria-labelledby="h-meet">
       <div class="node" data-node data-t="2"></div>
       <div class="pw" aria-hidden="true">
         <svg viewBox="0 0 260 200">
@@ -604,7 +612,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
     </section>
 
     <!-- 3. DINNER -->
-    <section class="stop stop--l" id="dinner" aria-labelledby="h-din">
+    <section class="stop stop--l day-only" id="dinner" aria-labelledby="h-din">
       <div class="node" data-node data-t="3"></div>
       <div class="pw" aria-hidden="true">
         <svg viewBox="0 0 280 190">
@@ -638,7 +646,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 
     <!-- 4. EVENING PARTY -->
     <section class="stop stop--r" id="party" aria-labelledby="h-par">
-      <div class="node" data-node data-t="4"></div>
+      <div class="node" data-node data-t="4" data-t-eve="3.6"></div>
       <div class="pw" aria-hidden="true">
         <svg viewBox="0 0 260 220">
           <ellipse cx="130" cy="212" rx="118" ry="7" fill="rgba(0,0,0,.2)"/>
@@ -669,7 +677,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 
     <!-- 5. GOOD TO KNOW -->
     <section class="stop stop--l" id="notes" aria-labelledby="h-not">
-      <div class="node" data-node data-t="4.5"></div>
+      <div class="node" data-node data-t="4.5" data-t-eve="4.4"></div>
       <div class="pw" aria-hidden="true">
         <svg viewBox="0 0 200 230">
           <ellipse cx="100" cy="222" rx="60" ry="6" fill="rgba(0,0,0,.2)"/>
@@ -688,7 +696,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
           <div class="faq">
             <details><summary><span data-i18n="qDress">Dress code</span> <svg class="pm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path class="v" d="M12 5v14"/></svg></summary><div data-i18n="aDress"><p><span class="ph">[Dress code details]</span></p></div></details>
             <details><summary><span data-i18n="qKids">Children</span> <svg class="pm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path class="v" d="M12 5v14"/></svg></summary><div data-i18n="aKids"><p><span class="ph">[Details about children]</span></p><p>The Guildhall is a fragile medieval building, so little ones need to be kept close.</p></div></details>
-            <details><summary><span data-i18n="qStay">Where to stay</span> <svg class="pm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path class="v" d="M12 5v14"/></svg></summary><div data-i18n="aStay"><p>We have a small block of rooms at Coombe Abbey Hotel for the night of the wedding, with breakfast included.</p><ul class="pour"><li>Crown bedroom for two: £125</li><li>Feature bedroom for two: £155</li><li>Children £25, infants £10</li></ul><p>Book directly with Coombe Abbey reservations on <a href="tel:+442476430535">024 7643 0535</a> or <a href="mailto:reservations@coombeabbey.com">reservations@coombeabbey.com</a> and mention our wedding. These rates hold until four weeks before the day, so book early. Check in after 3pm, check out by 10:30am.</p></div></details>
+            <details class="day-only"><summary><span data-i18n="qStay">Where to stay</span> <svg class="pm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path class="v" d="M12 5v14"/></svg></summary><div data-i18n="aStay"><p>We have a small block of rooms at Coombe Abbey Hotel for the night of the wedding, with breakfast included.</p><ul class="pour"><li>Crown bedroom for two: £125</li><li>Feature bedroom for two: £155</li><li>Children £25, infants £10</li></ul><p>Book directly with Coombe Abbey reservations on <a href="tel:+442476430535">024 7643 0535</a> or <a href="mailto:reservations@coombeabbey.com">reservations@coombeabbey.com</a> and mention our wedding. These rates hold until four weeks before the day, so book early. Check in after 3pm, check out by 10:30am.</p></div></details>
             <details><summary><span data-i18n="qGifts">Gifts</span> <svg class="pm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path class="v" d="M12 5v14"/></svg></summary><div data-i18n="aGifts"><p><span class="ph">[Gift information]</span></p></div></details>
             <details><summary><span data-i18n="qAsk">Questions</span> <svg class="pm" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path class="v" d="M12 5v14"/></svg></summary><div data-i18n="aAsk"><p><span class="ph">[Contact name, email or phone]</span></p></div></details>
           </div>
@@ -793,6 +801,7 @@ const SK = {
   navRsvp: 'Odpoveď',
   aHero: 'Svadobná pozvánka',
   kicker: 'Srdečne vás pozývame na svadbu',
+  kickerPm: 'Srdečne vás pozývame na večernú oslavu svadby',
   aNames: 'Melissa a Oliver',
   date: 'Štvrtok 29. apríla 2027',
   cue: 'Posúvajte nadol a nasledujte cestičku',
@@ -977,7 +986,6 @@ const STR = {
 
   /* ---------- the path and the couple ---------- */
   const world = $('#world'), svg = $('#trail'), pCob = $('#p-cob'), pVerge = $('#p-verge'), couple = $('#couple'), kscale = $('#kscale'), asleepG = $('#asleep'), hicT = $('#hic-t'), top = $('#trail-top');
-  const nodes = $$('[data-node]');
   let lut = null, curY = null, raf = 0, face = 1, lastDir = 1, lastD = '';
 
   function catmull(p) {
@@ -993,11 +1001,12 @@ const STR = {
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', W); svg.setAttribute('height', H);
     const sw = mobile.matches ? 14 : W * 0.05;
     const pts = [], marks = [];
+    const nodes = $$('[data-node]').filter(n => n.getClientRects().length), eve = root.classList.contains('evening');
     nodes.forEach((n, i) => {
       const r = n.getBoundingClientRect(), x = r.left - wr.left, y = r.top - wr.top;
       if (i > 0) { const p = pts[pts.length - 1]; pts.push({ x: (p.x + x) / 2 + (i % 2 ? sw : -sw), y: (p.y + y) / 2 }); }
       pts.push({ x, y });
-      marks.push({ y, t: parseFloat(n.dataset.t) });
+      marks.push({ y, t: parseFloat((eve && n.dataset.tEve) || n.dataset.t) });
     });
     const d = catmull(pts);
     const cw = mobile.matches ? 34 : 54;
@@ -1069,17 +1078,26 @@ const STR = {
   let accessCode = '';
   const gateForm = $('#gate-form'), gateErr = $('#gate-err'), gatePw = $('#gate-pw'), gateGo = $('#gate-go');
   const normCode = s => s.trim().toLowerCase();
-  async function codeOk(code) {
+  /* which invitation a password opens: 'day', 'evening' or null */
+  async function codeMode(code) {
     try {
       const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('mo-wedding:' + code));
-      return Array.from(new Uint8Array(b), x => x.toString(16).padStart(2, '0')).join('') === GATE.hash;
-    } catch (e) { return false; }
+      const hex = Array.from(new Uint8Array(b), x => x.toString(16).padStart(2, '0')).join('');
+      return GATE.evening && hex === GATE.evening ? 'evening' : GATE.day && hex === GATE.day ? 'day' : null;
+    } catch (e) { return null; }
   }
-  function openGate(code) {
+  function applyMode(mode) {
+    const eve = mode === 'evening';
+    root.classList.toggle('evening', eve);
+    const cal = $('#cal');
+    cal.href = cal.href.replace(/dates=[^&]*/, 'dates=' + (eve ? '20270429T173000Z/20270429T225500Z' : '20270429T110000Z/20270429T225500Z'));
+  }
+  function openGate(code, mode) {
     accessCode = code;
+    applyMode(mode);
     root.classList.remove('gate-checking'); root.classList.add('gate-open');
-    try { localStorage.setItem('mo-code', code); } catch (e) {}
-    rebuild(); /* the scrollbar was hidden while locked, so the page width changes */
+    try { localStorage.setItem('mo-code', code); localStorage.setItem('mo-mode', mode); } catch (e) {}
+    rebuild(); /* the layout and the scrollbar changed while the gate was up */
   }
   let gateBad = false;
   function gateSay() { gateErr.textContent = gateBad ? T('gateBad') : ''; }
@@ -1088,15 +1106,16 @@ const STR = {
     e.preventDefault();
     const code = normCode(gatePw.value);
     gateGo.disabled = true; gateBad = false; gateSay();
-    if (code && await codeOk(code)) openGate(code);
+    const mode = code ? await codeMode(code) : null;
+    if (mode) openGate(code, mode);
     else { gateBad = true; gateSay(); gatePw.select(); }
     gateGo.disabled = false;
   });
   if (!root.classList.contains('gate-open')) {
     let saved = ''; try { saved = localStorage.getItem('mo-code') || ''; } catch (e) {}
-    (saved ? codeOk(saved) : Promise.resolve(false)).then(ok => {
-      if (ok) openGate(saved);
-      else { root.classList.remove('gate-checking'); try { localStorage.removeItem('mo-code'); } catch (e) {} gatePw.focus(); }
+    (saved ? codeMode(saved) : Promise.resolve(null)).then(mode => {
+      if (mode) openGate(saved, mode);
+      else { root.classList.remove('gate-checking', 'evening'); try { localStorage.removeItem('mo-code'); localStorage.removeItem('mo-mode'); } catch (e) {} gatePw.focus(); }
     });
   }
 
