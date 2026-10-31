@@ -16,7 +16,7 @@
   This keeps casual visitors and search engines out. It is not strong security: the page text
   can still be read by anyone who views the source.
 */
-const GATE = { hash: '716eb446537421bcbce35c2f1b5f179a330a1f92131b2e0f0411a28338c81945' };
+const GATE = { hash: 'ec0a5f18cefc6178e1aba815a7e553a6e378e9a880b5e72b76aede6453f1c8f4' };
 (function () {
   const r = document.documentElement;
   if (!GATE.hash) { r.classList.add('gate-open'); return; }
@@ -89,12 +89,14 @@ html:not(.gate-open) body { overflow: hidden; }
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
+.top::before { content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: 0; height: calc(64px + env(safe-area-inset-top, 0px)); pointer-events: none; background: rgba(253, 246, 227, .93); border-bottom: 2px solid #D6C393; box-shadow: 0 4px 0 rgba(0, 0, 0, .14); }
+@supports (backdrop-filter: blur(6px)) { .top::before { background: rgba(253, 246, 227, .96); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); } }
 .top > * { pointer-events: auto; }
-.badge { font-family: var(--display); font-size: 1.35rem; text-decoration: none; background: var(--parch); color: var(--ink); border: 2px solid #D6C393; border-radius: 6px; padding: 2px 14px; box-shadow: 0 3px 0 rgba(0,0,0,.18); }
+.badge { display: inline-flex; align-items: center; height: 40px; font-family: var(--display); font-size: 1.35rem; text-decoration: none; background: var(--parch); color: var(--ink); border: 2px solid #D6C393; border-radius: 6px; padding: 0 14px; box-shadow: 0 3px 0 rgba(0,0,0,.18); }
 .topr { display: flex; align-items: flex-start; gap: 12px; }
-.rsvp-link { margin-top: 10px; font-family: var(--display); font-size: 1.1rem; text-decoration: none; background: var(--blue); color: #FDF6E3; border-radius: 999px; padding: 6px 18px; box-shadow: 0 3px 0 rgba(0,0,0,.25); transition: transform .3s var(--ease); }
+.rsvp-link { display: inline-flex; align-items: center; height: 40px; font-family: var(--display); font-size: 1.1rem; text-decoration: none; background: var(--blue); color: #FDF6E3; border-radius: 999px; padding: 6px 18px; box-shadow: 0 3px 0 rgba(0,0,0,.25); transition: transform .3s var(--ease); }
 .rsvp-link:hover { transform: translateY(-2px); }
-.lang { margin-top: 10px; display: flex; background: var(--parch); border: 2px solid #D6C393; border-radius: 999px; padding: 2px; box-shadow: 0 3px 0 rgba(0,0,0,.18); }
+.lang { height: 40px; align-items: center; display: flex; background: var(--parch); border: 2px solid #D6C393; border-radius: 999px; padding: 2px; box-shadow: 0 3px 0 rgba(0,0,0,.18); }
 .lang button { border: 0; background: none; font-family: var(--display); font-size: 1rem; line-height: 1; color: var(--ink); padding: 6px 10px; border-radius: 999px; cursor: pointer; transition: background .3s, color .3s; }
 .lang button[aria-pressed="true"] { background: var(--blue); color: #FDF6E3; }
 .lang button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
@@ -177,7 +179,10 @@ html:not(.gate-open) body { overflow: hidden; }
 .stop .node { top: calc(var(--pad) + 76px); left: 22px; }
 .pw { position: relative; width: 170px; margin: 0 0 8px 54px; }
 .pw svg { display: block; width: 100%; height: auto; overflow: visible; }
-.glow { position: absolute; z-index: 3; width: 150%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(255, 190, 90, .8), rgba(255, 170, 70, .22) 40%, transparent 68%); pointer-events: none; opacity: 0; }
+/* the scenes sit above the night tint so they stay readable; JS dims them a little and fades the lights in */
+.pw { z-index: 3; }
+.lit { opacity: 0; }
+.glow { position: absolute; z-index: 3; width: 190%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(255, 226, 150, .95), rgba(255, 190, 90, .5) 22%, rgba(255, 170, 70, .2) 45%, transparent 70%); mix-blend-mode: screen; pointer-events: none; opacity: 0; }
 .stack { display: flex; flex-direction: column; min-width: 0; flex: 1; }
 
 .card {
@@ -348,6 +353,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
     </div>
   </div>
 </header>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="poolg"><stop offset="0" stop-color="#FFE29A" stop-opacity=".9"/><stop offset=".45" stop-color="#FFC060" stop-opacity=".38"/><stop offset="1" stop-color="#FFB040" stop-opacity="0"/></radialGradient></defs></svg>
 <div class="tint" aria-hidden="true"></div>
 <div class="motes" id="motes" aria-hidden="true"></div>
 
@@ -387,15 +393,16 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 
             <!-- groom -->
             <g class="pg">
-              <g class="kl b"><rect x="16" y="64" width="9" height="38" rx="4" fill="#7B9070"/><ellipse cx="22" cy="104" rx="8" ry="4" fill="#15171F"/></g>
+              <g class="kl b"><rect x="16" y="64" width="9" height="38" rx="4" fill="#4C6642"/><ellipse cx="22" cy="104" rx="8" ry="4" fill="#15171F"/></g>
               <g class="ka b">
-                <path d="M14 42Q6 56 9 66" stroke="#93A887" stroke-width="7" fill="none" stroke-linecap="round"/>
+                <path d="M14 42Q6 56 9 66" stroke="#5F7B54" stroke-width="7" fill="none" stroke-linecap="round"/>
                 <circle cx="9" cy="67" r="4" fill="#F2C9A5"/>
                 <g class="bottle"><rect x="2" y="60" width="9" height="16" rx="3" fill="#2F6B3F"/><rect x="4.500" y="53" width="4" height="8" rx="1.500" fill="#2F6B3F"/><rect x="4.500" y="51" width="4" height="3" fill="#E0B24A"/></g>
               </g>
-              <path d="M12 36Q12 33 16 33H34Q38 33 38 36V68H12Z" fill="#93A887" stroke="#5E7154" stroke-width="1.200"/><path d="M25 45V66" stroke="#5E7154" stroke-width="1"/>
-              <path d="M21 33 25 45 29 33Z" fill="#FBF8F2"/><path d="M25 38l2 2-1.500 13-1.500-13z" fill="#2B4C9B"/>
-              <g class="kl f"><rect x="25" y="64" width="9" height="38" rx="4" fill="#93A887"/><ellipse cx="32" cy="104" rx="8" ry="4" fill="#15171F"/></g>
+              <path d="M12 36Q12 33 16 33H34Q38 33 38 36V68H12Z" fill="#5F7B54" stroke="#3C5234" stroke-width="1.200"/><path d="M25 45V66" stroke="#3C5234" stroke-width="1"/>
+              <path d="M21 33 25 45 29 33Z" fill="#FBF8F2"/><path d="M25 38l2 2-1.500 13-1.500-13z" fill="#CC5500"/>
+              <path d="M29 47V42L31.500 44 34 41.500 36 44V47Z" fill="#CC5500"/>
+              <g class="kl f"><rect x="25" y="64" width="9" height="38" rx="4" fill="#5F7B54"/><ellipse cx="32" cy="104" rx="8" ry="4" fill="#15171F"/></g>
               <rect x="22" y="28" width="7" height="6" fill="#E9B590"/>
               <circle cx="25" cy="22" r="11" fill="#F2C9A5"/>
               <path d="M14 21Q13 8 26 8Q38 9 36 21Q30 14 14 21Z" fill="#4A3220"/>
@@ -406,7 +413,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
               <g class="e-d" stroke="#2A2018" stroke-width="1.500" fill="none" stroke-linecap="round"><path d="M29 19l4 4M33 19l-4 4"/></g>
               <path class="m-n" d="M27 28Q30.500 31 34 28" stroke="#7A3030" stroke-width="1.400" fill="none" stroke-linecap="round"/>
               <path class="m-d" d="M26 29q2-3 4 0t4 0" stroke="#7A3030" stroke-width="1.400" fill="none" stroke-linecap="round"/>
-              <g class="ka f"><path d="M36 40Q46 52 52 63" stroke="#93A887" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="52" cy="64" r="4" fill="#F2C9A5"/></g>
+              <g class="ka f"><path d="M36 40Q46 52 52 63" stroke="#5F7B54" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="52" cy="64" r="4" fill="#F2C9A5"/></g>
               <g class="orbit" fill="#FFE08A"><circle cx="11" cy="0" r="2.200"/><circle cx="39" cy="0" r="2.200"/><circle cx="25" cy="-14" r="2.200"/><circle cx="25" cy="14" r="2.200"/></g>
               <g class="hic"><rect x="-6" y="-26" width="38" height="20" rx="7" fill="#FDF6E3" stroke="#D6C393"/><path d="M8 -6 12 -1 16 -6Z" fill="#FDF6E3" stroke="#D6C393"/><text id="hic-t" x="13" y="-12" text-anchor="middle">hic!</text></g>
             </g>
@@ -426,15 +433,15 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
               </g>
               <rect x="74" y="28" width="7" height="6" fill="#E9B590"/>
               <circle cx="77" cy="22" r="11" fill="#F2C9A5"/>
-              <path d="M66 21Q65 8 78 8Q90 9 88 21Q82 14 66 21Z" fill="#7A4A2A"/><circle cx="68" cy="13" r="5" fill="#7A4A2A"/>
-              <g fill="#E0B24A"><circle cx="73" cy="8" r="1.300"/><circle cx="78" cy="6.500" r="1.300"/><circle cx="83" cy="8" r="1.300"/></g>
+              <path d="M66 21Q65 8 78 8Q90 9 88 21Q82 14 66 21Z" fill="#E6C168"/><circle cx="68" cy="13" r="5" fill="#E6C168"/>
+              <g fill="#FFFDF5" stroke="#D6C393" stroke-width=".5"><circle cx="73" cy="8" r="1.400"/><circle cx="78" cy="6.500" r="1.400"/><circle cx="83" cy="8" r="1.400"/></g>
               <circle class="cheek" cx="81" cy="27" r="3" fill="#F28B8B"/>
               <g class="e-n" fill="#2A2018"><circle cx="83" cy="21" r="1.600"/></g>
               <g class="e-t" stroke="#2A2018" stroke-width="1.500" fill="none"><path d="M80.500 20.500Q83 23.500 85.500 20.500"/></g>
               <g class="e-d" stroke="#2A2018" stroke-width="1.500" fill="none" stroke-linecap="round"><path d="M81 19l4 4M85 19l-4 4"/></g>
               <path class="m-n" d="M79 28Q82.500 31 86 28" stroke="#C2384F" stroke-width="1.600" fill="none" stroke-linecap="round"/>
               <path class="m-d" d="M78 29q2-3 4 0t4 0" stroke="#C2384F" stroke-width="1.600" fill="none" stroke-linecap="round"/>
-              <path class="mess" d="M66 12Q60 8 62 16M68 8Q66 2 72 4" stroke="#7A4A2A" stroke-width="1.600" fill="none" stroke-linecap="round"/>
+              <path class="mess" d="M66 12Q60 8 62 16M68 8Q66 2 72 4" stroke="#D9B552" stroke-width="1.600" fill="none" stroke-linecap="round"/>
               <g class="ka f"><path d="M68 38Q60 50 54 62" stroke="#FBF8F2" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="53" cy="64" r="3.500" fill="#F2C9A5"/></g>
             </g>
           </g>
@@ -445,10 +452,10 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
       <g id="asleep">
         <ellipse cx="0" cy="2" rx="88" ry="7" fill="rgba(0,0,0,.25)"/>
         <g transform="translate(8 -9)">
-          <rect x="-8" y="-18" width="42" height="15" rx="6" fill="#7B9070"/>
+          <rect x="-8" y="-18" width="42" height="15" rx="6" fill="#4C6642"/>
           <ellipse cx="38" cy="-10" rx="8" ry="5" fill="#15171F"/>
-          <rect x="-48" y="-23" width="42" height="22" rx="9" fill="#93A887"/>
-          <rect x="-33" y="-22" width="5" height="13" rx="2" fill="#2B4C9B"/>
+          <rect x="-48" y="-23" width="42" height="22" rx="9" fill="#5F7B54"/>
+          <rect x="-33" y="-22" width="5" height="13" rx="2" fill="#CC5500"/><path d="M-24 -16V-21L-21.500 -19.500 -19 -21V-16Z" fill="#CC5500"/>
           <circle cx="-58" cy="-14" r="11" fill="#F2C9A5"/>
           <path d="M-68 -17Q-66 -28 -54 -26Q-48 -24 -48 -18Q-58 -22 -68 -17Z" fill="#4A3220"/>
           <path d="M-62 -14Q-60 -11.500 -58 -14" stroke="#4A3220" stroke-width="1.500" fill="none"/>
@@ -463,8 +470,8 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
           <rect x="-46" y="-21" width="36" height="21" rx="8" fill="#FBF8F2" stroke="#E3D9C6" stroke-width="1.500"/>
           <path d="M-62 -18Q-98 -16 -96 4Q-74 8 -56 -4Z" fill="rgba(255,255,255,.82)" stroke="#D6DDE8"/>
           <circle cx="-58" cy="-12" r="11" fill="#F2C9A5"/>
-          <path d="M-68 -14Q-66 -25 -54 -23Q-48 -21 -48 -15Q-58 -19 -68 -14Z" fill="#7A4A2A"/>
-          <g fill="#E0B24A"><circle cx="-62" cy="-24" r="1.300"/><circle cx="-57" cy="-25" r="1.300"/><circle cx="-52" cy="-23" r="1.300"/></g>
+          <path d="M-68 -14Q-66 -25 -54 -23Q-48 -21 -48 -15Q-58 -19 -68 -14Z" fill="#E6C168"/>
+          <g fill="#FFFDF5" stroke="#D6C393" stroke-width=".5"><circle cx="-62" cy="-24" r="1.400"/><circle cx="-57" cy="-25" r="1.400"/><circle cx="-52" cy="-23" r="1.400"/></g>
           <path d="M-62 -11Q-60 -8.500 -58 -11" stroke="#2A2018" stroke-width="1.500" fill="none"/>
           <circle cx="-56" cy="-7" r="3" fill="#F28B8B"/>
           <ellipse cx="66" cy="-6" rx="7" ry="4" fill="#F4F1EA" stroke="#CFCABF"/><ellipse cx="84" cy="-1" rx="7" ry="4" fill="#F4F1EA" stroke="#CFCABF" transform="rotate(24 84 -1)"/>
@@ -547,7 +554,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
           <path d="M116 222V198Q116 182 130 182Q144 182 144 198V222Z" fill="#5A3A22"/>
           <path d="M130 22V4" stroke="#5A3A22" stroke-width="3"/><path d="M130 4 162 11 130 18Z" fill="#2B4C9B"/>
         </svg>
-        <div class="glow" style="left:50%;top:58%;--g:.8"></div>
+        <div class="glow" style="left:50%;top:34%;--g:1"></div>
       </div>
       <div class="stack">
         <article class="card c1">
@@ -601,9 +608,12 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
           <rect x="40" y="62" width="20" height="46" rx="3" fill="#5A3A22"/><rect x="130" y="62" width="20" height="46" rx="3" fill="#5A3A22"/><rect x="222" y="62" width="20" height="46" rx="3" fill="#5A3A22"/>
           <rect x="14" y="104" width="252" height="10" rx="3" fill="#7B4F2E"/>
           <path d="M24 114H256V160Q240 168 224 160Q208 168 192 160Q176 168 160 160Q144 168 128 160Q112 168 96 160Q80 168 64 160Q48 168 32 160L24 160Z" fill="#F3E6C8"/>
+          <ellipse class="lit" cx="140" cy="108" rx="132" ry="24" fill="url(#poolg)"/>
           <path d="M112 72Q112 92 140 92Q168 92 168 72" stroke="#E0B24A" stroke-width="3" fill="none"/><rect x="138" y="62" width="4" height="40" fill="#E0B24A"/><rect x="132" y="98" width="16" height="6" fill="#E0B24A"/>
           <rect x="109" y="58" width="6" height="16" fill="#FBF4E2"/><rect x="137" y="50" width="6" height="16" fill="#FBF4E2"/><rect x="165" y="58" width="6" height="16" fill="#FBF4E2"/>
-          <ellipse class="flame" cx="112" cy="54" rx="4" ry="7" fill="#FFC13A"/><ellipse class="flame" cx="140" cy="46" rx="4" ry="7" fill="#FFC13A"/><ellipse class="flame" cx="168" cy="54" rx="4" ry="7" fill="#FFC13A"/>
+          <ellipse class="flame" cx="112" cy="53" rx="5" ry="9" fill="#FFC13A"/><ellipse class="flame" cx="140" cy="45" rx="5" ry="9" fill="#FFC13A"/><ellipse class="flame" cx="168" cy="53" rx="5" ry="9" fill="#FFC13A"/>
+          <g fill="#FFF3B0"><ellipse class="flame" cx="112" cy="55" rx="2" ry="4.500"/><ellipse class="flame" cx="140" cy="47" rx="2" ry="4.500"/><ellipse class="flame" cx="168" cy="55" rx="2" ry="4.500"/></g>
+          <g class="lit" fill="url(#poolg)"><circle cx="112" cy="54" r="24"/><circle cx="140" cy="46" r="24"/><circle cx="168" cy="54" r="24"/></g>
           <ellipse cx="62" cy="107" rx="18" ry="4" fill="#fff"/><ellipse cx="218" cy="107" rx="18" ry="4" fill="#fff"/>
           <path d="M86 104 88 88H98L100 104Z" fill="#E0B24A"/><path d="M180 104 182 88H192L194 104Z" fill="#E0B24A"/><ellipse cx="238" cy="100" rx="12" ry="5" fill="#C98B4B"/>
         </svg>
@@ -634,10 +644,11 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
           <g class="bulb" fill="#FFA4B8"><circle cx="79" cy="97" r="5" style="animation-delay:.2s"/><circle cx="130" cy="103" r="5" style="animation-delay:.6s"/><circle cx="181" cy="97" r="5" style="animation-delay:1s"/></g>
           <g fill="#8A857B"><ellipse cx="92" cy="198" rx="12" ry="7"/><ellipse cx="120" cy="204" rx="12" ry="7"/><ellipse cx="150" cy="204" rx="12" ry="7"/><ellipse cx="178" cy="198" rx="12" ry="7"/></g>
           <rect x="92" y="184" width="76" height="12" rx="6" transform="rotate(-18 130 190)" fill="#5A3A22"/><rect x="92" y="184" width="76" height="12" rx="6" transform="rotate(18 130 190)" fill="#4A2F1B"/>
-          <g class="flame"><path d="M130 192C94 178 102 140 126 108C124 140 150 142 144 118C168 140 168 178 130 192Z" fill="#F26A21"/><path d="M130 190C108 180 112 154 128 134C128 152 144 152 142 140C154 156 150 180 130 190Z" fill="#FFB42E"/><path d="M130 188C120 182 122 168 130 158C136 168 140 182 130 188Z" fill="#FFE58A"/></g>
+          <ellipse class="lit" cx="130" cy="202" rx="118" ry="20" fill="url(#poolg)"/>
+          <g transform="translate(130 196) scale(1.2) translate(-130 -196)"><g class="flame"><path d="M130 192C94 178 102 140 126 108C124 140 150 142 144 118C168 140 168 178 130 192Z" fill="#F26A21"/><path d="M130 190C108 180 112 154 128 134C128 152 144 152 142 140C154 156 150 180 130 190Z" fill="#FFB42E"/><path d="M130 188C120 182 122 168 130 158C136 168 140 182 130 188Z" fill="#FFE58A"/></g></g>
           <g fill="#FFC13A"><circle class="spark" cx="122" cy="110" r="2"/><circle class="spark" cx="140" cy="106" r="2" style="animation-delay:.7s"/><circle class="spark" cx="132" cy="112" r="1.600" style="animation-delay:1.4s"/></g>
         </svg>
-        <div class="glow" style="left:50%;top:66%;--g:1.2"></div>
+        <div class="glow" style="left:50%;top:62%;--g:1.3"></div>
       </div>
       <div class="stack">
         <article class="card c4">
@@ -660,9 +671,12 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
           <ellipse cx="100" cy="222" rx="60" ry="6" fill="rgba(0,0,0,.2)"/>
           <rect x="96" y="64" width="8" height="156" fill="#2A2018"/><rect x="84" y="206" width="32" height="14" rx="3" fill="#2A2018"/>
           <rect x="80" y="30" width="40" height="38" rx="8" fill="#2A2018"/><path d="M76 30 100 14 124 30Z" fill="#2A2018"/>
+          <ellipse class="lit" cx="100" cy="218" rx="78" ry="9" fill="url(#poolg)"/>
+          <rect class="lit" x="86" y="36" width="28" height="26" rx="5" fill="#FFE29A"/>
+          <circle class="lit" cx="100" cy="48" r="44" fill="url(#poolg)"/>
           <ellipse class="flame" cx="100" cy="50" rx="7" ry="11" fill="#FFC13A"/>
         </svg>
-        <div class="glow" style="left:50%;top:22%;--g:1"></div>
+        <div class="glow" style="left:50%;top:22%;--g:1.2"></div>
       </div>
       <div class="stack">
         <article class="card c5">
@@ -691,9 +705,14 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
           <path d="M62 140H112M62 204H112" stroke="#2A2018" stroke-width="7" stroke-linecap="round"/><circle cx="112" cy="140" r="5" fill="#2A2018"/><circle cx="112" cy="204" r="5" fill="#2A2018"/>
           <circle cx="148" cy="180" r="9" fill="none" stroke="#2A2018" stroke-width="3"/><circle cx="148" cy="170" r="4" fill="#2A2018"/>
           <rect x="12" y="116" width="16" height="26" rx="4" fill="#2A2018"/><rect x="212" y="116" width="16" height="26" rx="4" fill="#2A2018"/>
-          <circle class="flame" cx="20" cy="130" r="5" fill="#FFC13A"/><circle class="flame" cx="220" cy="130" r="5" fill="#FFC13A"/>
+          <path class="lit" d="M62 244V128Q62 82 120 54Q178 82 178 128V244Z" fill="#FFB24A" fill-opacity=".34"/>
+          <ellipse class="lit" cx="120" cy="258" rx="104" ry="13" fill="url(#poolg)"/>
+          <rect class="lit" x="15" y="120" width="10" height="18" rx="3" fill="#FFE29A"/><rect class="lit" x="215" y="120" width="10" height="18" rx="3" fill="#FFE29A"/>
+          <g class="lit" fill="url(#poolg)"><circle cx="20" cy="130" r="34"/><circle cx="220" cy="130" r="34"/></g>
+          <circle class="flame" cx="20" cy="130" r="6" fill="#FFC13A"/><circle class="flame" cx="220" cy="130" r="6" fill="#FFC13A"/>
         </svg>
         <div class="glow" style="left:50%;top:62%;--g:1"></div>
+        <div class="glow" style="left:8%;top:48%;width:110%;--g:.9"></div><div class="glow" style="left:92%;top:48%;width:110%;--g:.9"></div>
       </div>
       <div class="stack">
         <article class="card c6 letter">
@@ -924,7 +943,7 @@ const STR = {
   const SKYT = ['#8FD0F3', '#5DB4EA', '#F2B35E', '#7A4F8F', '#1F2A5E', '#0A1030'].map(hex);
   const SKYB = ['#E6F5FB', '#CDEBFA', '#FBE3B0', '#F08C6E', '#5A4A8F', '#1B2352'].map(hex);
   /* these are set directly (not through variables on <html>) so a scroll never restyles the whole page */
-  const tintEl = $('.tint'), motesEl = $('#motes'), lampEl = $('.lamp');
+  const tintEl = $('.tint'), motesEl = $('#motes'), lampEl = $('.lamp'), lits = $$('.lit'), scenes = $$('.pw');
   const glows = $$('.glow').map(el => ({ el, k: parseFloat((el.getAttribute('style') || '').match(/--g:\s*([\d.]+)/)?.[1] || 1) }));
   let lastT = -1;
   function applyTime(t) {
@@ -936,7 +955,11 @@ const STR = {
     const night = lerp(NIGHT[i], NIGHT[i + 1], f);
     motesEl.style.opacity = night.toFixed(3);
     lampEl.style.opacity = (night * .95).toFixed(3);
-    glows.forEach(g => { g.el.style.opacity = (night * g.k).toFixed(3); });
+    const lightOn = Math.min(1, night * 1.7); /* lights come on early, at dusk */
+    glows.forEach(g => { g.el.style.opacity = (lightOn * g.k).toFixed(3); });
+    lits.forEach(el => { el.style.opacity = lightOn.toFixed(3); });
+    const dim = 1 - .3 * tc[3] / .82;
+    scenes.forEach(el => { el.style.filter = dim < .999 ? `brightness(${dim.toFixed(3)})` : ''; });
     $('#sg1').setAttribute('stop-color', rgb(mix(SKYT[i], SKYT[i + 1], f)));
     $('#sg2').setAttribute('stop-color', rgb(mix(SKYB[i], SKYB[i + 1], f)));
     $('#stars').style.opacity = night.toFixed(2);
