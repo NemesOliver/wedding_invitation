@@ -58,6 +58,10 @@ body { margin: 0; background: var(--ground); color: var(--ink); font-family: var
 [hidden] { display: none !important; }
 svg { display: block; }
 a { color: inherit; }
+.gmap { text-decoration: underline dotted; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+.gmap:hover { text-decoration-style: solid; }
+.card .gmap { color: var(--c-accent); }
+.maplink { color: var(--c-accent); font-weight: 700; text-underline-offset: 3px; }
 :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 .wrap { width: 100%; max-width: 1180px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 .ph { border-bottom: 2px dashed currentColor; font-style: normal; overflow-wrap: anywhere; }
@@ -529,7 +533,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
     <div class="wrap hero-inner">
       <p class="kicker" data-i18n="kicker">Please join us for the wedding of</p>
       <h1 class="names" aria-label="Melissa and Oliver" data-i18n-aria="aNames"><span class="n1" aria-hidden="true">Melissa</span><span class="n2" aria-hidden="true"><em>&amp;</em>Oliver</span></h1>
-      <p class="when"><span data-i18n="date" style="display:inline;font:inherit;margin:0">Thursday 29 April 2027</span><span>St Mary's Guildhall, Coventry</span></p>
+      <p class="when"><span data-i18n="date" style="display:inline;font:inherit;margin:0">Thursday 29 April 2027</span><span><a class="gmap" href="https://www.google.com/maps/search/?api=1&amp;query=St+Mary%27s+Guildhall%2C+Bayley+Lane%2C+Coventry+CV1+5RN" target="_blank" rel="noopener">St Mary's Guildhall, Coventry</a></span></p>
       <p class="count" id="count"></p>
     </div>
     <p class="cue" id="cue" data-i18n="cue">Scroll to follow the path</p>
@@ -560,12 +564,12 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
         <article class="card c1">
           <h2 id="h-cer" data-i18n="cerH">The ceremony</h2>
           <p class="time" data-i18n="cerT">1:00pm</p>
-          <p data-i18n="cerWhere">The Great Hall, St Mary's Guildhall</p>
+          <p data-i18n="cerWhere">The Great Hall, <a class="gmap" href="https://www.google.com/maps/search/?api=1&amp;query=St+Mary%27s+Guildhall%2C+Bayley+Lane%2C+Coventry+CV1+5RN" target="_blank" rel="noopener">St Mary's Guildhall</a></p>
           <p class="soft">Bayley Lane, Coventry CV1 5RN</p>
           <p class="sub" data-i18n="cerArr">Arrive from 12:00</p>
           <p data-i18n="cerDrinks">Arrival drinks in the Undercroft or out in the Courtyard, weather permitting.</p>
           <ul class="pour"><li data-i18n="cerPour">An arrival cocktail <span class="or">or</span> a mocktail</li></ul>
-          <p class="soft" data-i18n="cerPark"><span class="ph">[Parking and directions]</span></p>
+          <p class="soft" data-i18n="cerPark">Parking: there are several car parks close to the Guildhall. <a class="maplink" href="https://en.parkopedia.co.uk/parking/locations/bayley_lane_coventry_cv1_5rj_united_kingdom_5aebgcqfjst9u3qhc1/?arriving=202704291300&amp;leaving=202704291400" target="_blank" rel="noopener">See parking near Bayley Lane on Parkopedia</a>.</p>
         </article>
       </div>
     </section>
@@ -756,7 +760,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
   <footer class="foot">
     <div class="wrap">
       <p class="big">Melissa &amp; Oliver</p>
-      <p><span data-i18n="date">Thursday 29 April 2027</span> &nbsp;·&nbsp; St Mary's Guildhall, Coventry</p>
+      <p><span data-i18n="date">Thursday 29 April 2027</span> &nbsp;·&nbsp; <a class="gmap" href="https://www.google.com/maps/search/?api=1&amp;query=St+Mary%27s+Guildhall%2C+Bayley+Lane%2C+Coventry+CV1+5RN" target="_blank" rel="noopener">St Mary's Guildhall, Coventry</a></p>
       <p><span class="ph">[#hashtag]</span> &nbsp;·&nbsp; <span class="ph" data-i18n="footMail">[contact email]</span></p>
       <a class="cal" id="cal" data-i18n="cal" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Melissa%20and%20Oliver%27s%20wedding&amp;dates=20270429T110000Z/20270429T225500Z&amp;location=St%20Mary%27s%20Guildhall%2C%20Bayley%20Lane%2C%20Coventry%20CV1%205RN" target="_blank" rel="noopener">Add to calendar</a>
     </div>
@@ -795,11 +799,11 @@ const SK = {
 
   cerH: 'Sobáš',
   cerT: '13:00',
-  cerWhere: 'Sála Great Hall, St Mary\'s Guildhall',
+  cerWhere: 'Sála Great Hall, <a class="gmap" href="https://www.google.com/maps/search/?api=1&amp;query=St+Mary%27s+Guildhall%2C+Bayley+Lane%2C+Coventry+CV1+5RN" target="_blank" rel="noopener">St Mary\'s Guildhall</a>',
   cerArr: 'Príchod od 12:00',
   cerDrinks: 'Uvítací drink v klenbovej sieni Undercroft alebo vonku na nádvorí Courtyard, ak bude priať počasie.',
   cerPour: 'Uvítací koktail <span class="or">alebo</span> nealkoholický koktail',
-  cerPark: '<span class="ph">[Parkovanie a ako sa k nám dostať]</span>',
+  cerPark: 'Parkovanie: neďaleko Guildhallu je niekoľko parkovísk. <a class="maplink" href="https://en.parkopedia.co.uk/parking/locations/bayley_lane_coventry_cv1_5rj_united_kingdom_5aebgcqfjst9u3qhc1/?arriving=202704291300&amp;leaving=202704291400" target="_blank" rel="noopener">Pozrite si parkoviská pri Bayley Lane na Parkopedii</a>.',
 
   meetH: 'Spoločný prípitok',
   meetT: '13:30 – 15:30',
@@ -1056,6 +1060,10 @@ const STR = {
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(rebuild);
   addEventListener('load', rebuild);
   buildTrail();
+
+  /* ---------- Good to know: opening one question closes the others ---------- */
+  const faqs = $$('.faq details');
+  faqs.forEach(d => d.addEventListener('toggle', () => { if (d.open) faqs.forEach(o => { if (o !== d) o.open = false; }); }));
 
   /* ---------- password screen ---------- */
   let accessCode = '';
