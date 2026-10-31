@@ -126,22 +126,23 @@ html:not(.gate-open) body { overflow: hidden; }
 }
 .trail { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: visible; }
 .trail--top { z-index: 3; inset: auto; left: 0; top: 0; width: 2px; height: 2px; will-change: transform; contain: none; }
+.trail--chars { z-index: 5; }   /* the couple walk in front of the cards */
 /* above the tint, so they keep their colours after dark and get a warm halo */
 .lamp { opacity: 0; }
 .s1 { fill: var(--cob1); } .s2 { fill: var(--cob2); } .s3 { fill: var(--cob3); } .mortar { fill: var(--mortar); }
 
 /* the couple: a skip in the step, then a wobble, then lights out */
 #couple .kb { transform-box: fill-box; transform-origin: 50% 100%; }
-#couple.walking .kb { animation: bob .34s ease-in-out infinite; }
+#couple .walk .kb { animation: bob .34s ease-in-out infinite; }
 .kl, .ka { transform-box: fill-box; transform-origin: 50% 0; }
-#couple.walking .kl.f { animation: legA .34s ease-in-out infinite alternate; }
-#couple.walking .kl.b { animation: legA .34s ease-in-out infinite alternate-reverse; }
-#couple.walking .ka.b { animation: legA .34s ease-in-out infinite alternate; }
+#couple .walk .kl.f { animation: legA .34s ease-in-out infinite alternate; }
+#couple .walk .kl.b { animation: legA .34s ease-in-out infinite alternate-reverse; }
+#couple .walk .ka.b { animation: legA .34s ease-in-out infinite alternate; }
 .pg, .pb { transform-box: fill-box; transform-origin: 50% 100%; }
 .pg { animation: tip .9s ease-in-out infinite alternate; }
 .pb { animation: tip 1.15s ease-in-out infinite alternate-reverse; }
 .skirt { transform-box: fill-box; transform-origin: 50% 0; }
-#couple.walking .skirt { animation: skirt .34s ease-in-out infinite alternate; }
+#couple .walk .skirt { animation: skirt .34s ease-in-out infinite alternate; }
 .veil { transform-box: fill-box; transform-origin: 100% 0; animation: plume 1.8s ease-in-out infinite alternate; }
 .cheek { opacity: calc(var(--d, 0) * .85); }
 .bq { transform-box: fill-box; transform-origin: 30% 10%; transform: rotate(calc(var(--d, 0) * 42deg)); }
@@ -393,22 +394,24 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
   </svg>
 
   <!-- the couple walk above the night tint, so they stay readable after dark -->
+  <!-- the lamp light sits under the cards; the couple walk above everything -->
   <svg class="trail trail--top" id="trail-top" aria-hidden="true">
     <defs><radialGradient id="lampg"><stop offset="0" stop-color="#FFD98A" stop-opacity=".55"/><stop offset=".5" stop-color="#FFC66A" stop-opacity=".18"/><stop offset="1" stop-color="#FFC66A" stop-opacity="0"/></radialGradient></defs>
-    <g id="couple">
       <ellipse class="lamp" cx="0" cy="-46" rx="110" ry="96" fill="url(#lampg)"/>
+  </svg>
+  <svg class="trail trail--top trail--chars" id="trail-chars" aria-hidden="true">
+    <g id="couple">
       <g id="kscale">
         <g transform="translate(-50 -108)">
-          <ellipse cx="50" cy="107" rx="46" ry="5" fill="rgba(0,0,0,.25)"/>
+          <ellipse cx="26" cy="107" rx="22" ry="5" fill="rgba(0,0,0,.25)"/>
           <g class="kb">
-
             <!-- groom -->
             <g class="pg">
               <g class="kl b"><rect x="16" y="64" width="9" height="38" rx="4" fill="#4C6642"/><ellipse cx="22" cy="104" rx="8" ry="4" fill="#15171F"/></g>
               <g class="ka b">
                 <path d="M14 42Q6 56 9 66" stroke="#5F7B54" stroke-width="7" fill="none" stroke-linecap="round"/>
                 <circle cx="9" cy="67" r="4" fill="#F2C9A5"/>
-                <g class="bottle"><rect x="2" y="60" width="9" height="16" rx="3" fill="#2F6B3F"/><rect x="4.500" y="53" width="4" height="8" rx="1.500" fill="#2F6B3F"/><rect x="4.500" y="51" width="4" height="3" fill="#E0B24A"/></g>
+                <g class="bottle"><rect x="2" y="60" width="9" height="16" rx="3" fill="#17171C"/><rect x="4.500" y="53" width="4" height="8" rx="1.500" fill="#17171C"/><rect x="4.500" y="51" width="4" height="3" fill="#E0B24A"/></g>
               </g>
               <path d="M12 36Q12 33 16 33H34Q38 33 38 36V68H12Z" fill="#5F7B54" stroke="#3C5234" stroke-width="1.200"/><path d="M25 45V66" stroke="#3C5234" stroke-width="1"/>
               <path d="M21 33 25 45 29 33Z" fill="#FBF8F2"/><path d="M25 38l2 2-1.500 13-1.500-13z" fill="#CC5500"/>
@@ -428,15 +431,23 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
               <g class="orbit" fill="#FFE08A"><circle cx="11" cy="0" r="2.200"/><circle cx="39" cy="0" r="2.200"/><circle cx="25" cy="-14" r="2.200"/><circle cx="25" cy="14" r="2.200"/></g>
               <g class="hic"><rect x="-6" y="-26" width="38" height="20" rx="7" fill="#FDF6E3" stroke="#D6C393"/><path d="M8 -6 12 -1 16 -6Z" fill="#FDF6E3" stroke="#D6C393"/><text id="hic-t" x="13" y="-12" text-anchor="middle">hic!</text></g>
             </g>
-
+          </g>
+        </g>
+      </g>
+      <g id="bpos">
+        <g id="bscale">
+          <g transform="translate(-50 -108)">
+            <ellipse cx="78" cy="107" rx="28" ry="5" fill="rgba(0,0,0,.25)"/>
+            <g class="kb">
             <!-- bride -->
             <g class="pb">
               <path class="veil" d="M70 10C55 14 46 32 46 66L60 52C60 36 65 26 75 18Z" fill="rgba(255,255,255,.82)" stroke="#D6DDE8" stroke-width="1"/>
+              <path d="M68 10Q55 18 56 40Q57 56 62 66Q70 64 71 54L74 28Z" fill="#E6C168"/><path d="M60 38Q59 52 62 62" stroke="#D9B552" stroke-width="1.200" fill="none" stroke-linecap="round"/>
               <g class="kl b"><rect x="64" y="94" width="6" height="12" fill="#F2C9A5"/><ellipse cx="66" cy="107" rx="7" ry="3.500" fill="#F4F1EA" stroke="#CFCABF"/></g>
               <g class="skirt"><path d="M63 54H91L106 103Q77 111 48 103Z" fill="#FBF8F2" stroke="#E3D9C6" stroke-width="1.500"/><path d="M70 60 62 102M77 60 77 106M84 60 92 102" stroke="#E7DFCE" stroke-width="1.500" fill="none"/></g>
               <g class="kl f"><rect x="80" y="94" width="6" height="12" fill="#F2C9A5"/><ellipse cx="84" cy="107" rx="7" ry="3.500" fill="#F4F1EA" stroke="#CFCABF"/></g>
               <path d="M66 36Q66 34 69 34H85Q88 34 88 36L91 56H63Z" fill="#FBF8F2" stroke="#E3D9C6" stroke-width="1.500"/>
-              <rect x="63" y="52" width="28" height="4" fill="#2B4C9B"/>
+              <rect x="63" y="52" width="28" height="4" fill="#CC5500"/>
               <g class="ka b">
                 <path d="M88 40Q96 50 98 58" stroke="#FBF8F2" stroke-width="6" fill="none" stroke-linecap="round"/>
                 <circle cx="98" cy="60" r="3.500" fill="#F2C9A5"/>
@@ -444,7 +455,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
               </g>
               <rect x="74" y="28" width="7" height="6" fill="#E9B590"/>
               <circle cx="77" cy="22" r="11" fill="#F2C9A5"/>
-              <path d="M66 21Q65 8 78 8Q90 9 88 21Q82 14 66 21Z" fill="#E6C168"/><circle cx="68" cy="13" r="5" fill="#E6C168"/>
+              <path d="M66 21Q65 8 78 8Q90 9 88 21Q82 14 66 21Z" fill="#E6C168"/>
               <g fill="#FFFDF5" stroke="#D6C393" stroke-width=".5"><circle cx="73" cy="8" r="1.400"/><circle cx="78" cy="6.500" r="1.400"/><circle cx="83" cy="8" r="1.400"/></g>
               <circle class="cheek" cx="81" cy="27" r="3" fill="#F28B8B"/>
               <g class="e-n" fill="#2A2018"><circle cx="83" cy="21" r="1.600"/></g>
@@ -453,7 +464,9 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
               <path class="m-n" d="M79 28Q82.500 31 86 28" stroke="#C2384F" stroke-width="1.600" fill="none" stroke-linecap="round"/>
               <path class="m-d" d="M78 29q2-3 4 0t4 0" stroke="#C2384F" stroke-width="1.600" fill="none" stroke-linecap="round"/>
               <path class="mess" d="M66 12Q60 8 62 16M68 8Q66 2 72 4" stroke="#D9B552" stroke-width="1.600" fill="none" stroke-linecap="round"/>
+              <path d="M66 20Q61 30 62 44Q63 54 67 58Q71 50 70 40Q70 30 72 24Z" fill="#E6C168"/>
               <g class="ka f"><path d="M68 38Q60 50 54 62" stroke="#FBF8F2" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="53" cy="64" r="3.500" fill="#F2C9A5"/></g>
+            </g>
             </g>
           </g>
         </g>
@@ -474,11 +487,12 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
           <circle class="snore" cx="-49" cy="-8" r="4" fill="rgba(255,255,255,.7)"/>
         </g>
         <g transform="translate(-24 7) rotate(-8)">
-          <rect x="-14" y="-6" width="26" height="8" rx="3" fill="#2F6B3F"/><rect x="10" y="-4" width="8" height="4" rx="1" fill="#2F6B3F"/>
+          <rect x="-14" y="-6" width="26" height="8" rx="3" fill="#17171C"/><rect x="10" y="-4" width="8" height="4" rx="1" fill="#17171C"/>
         </g>
         <g transform="translate(-2 2)">
           <path d="M-12 -20Q20 -42 62 -16L64 0Q22 6 -12 0Z" fill="#FBF8F2" stroke="#E3D9C6" stroke-width="1.500"/>
           <rect x="-46" y="-21" width="36" height="21" rx="8" fill="#FBF8F2" stroke="#E3D9C6" stroke-width="1.500"/>
+          <path d="M-64 -14Q-84 -10 -92 0Q-80 8 -58 0Z" fill="#E6C168"/>
           <path d="M-62 -18Q-98 -16 -96 4Q-74 8 -56 -4Z" fill="rgba(255,255,255,.82)" stroke="#D6DDE8"/>
           <circle cx="-58" cy="-12" r="11" fill="#F2C9A5"/>
           <path d="M-68 -14Q-66 -25 -54 -23Q-48 -21 -48 -15Q-58 -19 -68 -14Z" fill="#E6C168"/>
@@ -985,8 +999,8 @@ const STR = {
   }
 
   /* ---------- the path and the couple ---------- */
-  const world = $('#world'), svg = $('#trail'), pCob = $('#p-cob'), pVerge = $('#p-verge'), couple = $('#couple'), kscale = $('#kscale'), asleepG = $('#asleep'), hicT = $('#hic-t'), top = $('#trail-top');
-  let lut = null, curY = null, raf = 0, face = 1, lastDir = 1, lastD = '';
+  const world = $('#world'), svg = $('#trail'), pCob = $('#p-cob'), pVerge = $('#p-verge'), couple = $('#couple'), kscale = $('#kscale'), bpos = $('#bpos'), bscale = $('#bscale'), chars = $('#trail-chars'), asleepG = $('#asleep'), hicT = $('#hic-t'), top = $('#trail-top');
+  let lut = null, curY = null, raf = 0, prevG = null, prevB = null, faceG = 1, faceB = 1, dirG = 1, dirB = 1, lastD = '';
 
   function catmull(p) {
     let d = 'M' + p[0].x.toFixed(1) + ',' + p[0].y.toFixed(1);
@@ -1021,7 +1035,10 @@ const STR = {
     const total = pCob.getTotalLength(), N = 600, xs = [], ys = [], cm = [];
     let mx = -1;
     for (let i = 0; i <= N; i++) { const p = pCob.getPointAtLength(total * i / N); xs.push(p.x); ys.push(p.y); mx = Math.max(mx, p.y); cm.push(mx); }
-    lut = { xs, ys, cm, marks, y0: marks[0].y, y1: marks[marks.length - 1].y };
+    /* day guests: the groom walks to the ceremony first and waits there, the bride follows a little behind, then they leave together */
+    const ci = eve ? -1 : marks.findIndex(m => m.t === 1), cy = ci > 0 ? marks[ci].y : 0;
+    const hold = ci > 0 ? clamp(cy - marks[0].y, 200, 400) : 0;
+    lut = { xs, ys, cm, marks, y0: marks[0].y, y1: marks[marks.length - 1].y, cy, hold };
     curY = null; update();
   }
   function idxForY(y) { const a = lut.cm; let lo = 0, hi = a.length - 1; while (lo < hi) { const m = (lo + hi) >> 1; if (a[m] >= y) hi = m; else lo = m + 1; } return lo; }
@@ -1031,31 +1048,48 @@ const STR = {
     for (let i = 1; i < m.length; i++) if (y <= m[i].y) return lerp(m[i - 1].t, m[i].t, (y - m[i - 1].y) / (m[i].y - m[i - 1].y));
     return m[m.length - 1].t;
   }
+  /* where the groom and the bride are on the path for a scroll position u */
+  function place(u) {
+    const { y0, y1, cy, hold } = lut;
+    if (!hold) return [u, u];
+    if (u < cy) return [u, y0];                                        /* the bride is not out yet */
+    if (u < cy + hold) return [cy, y0 + (cy - y0) * (u - cy) / hold];  /* the groom waits, she walks the whole path */
+    const q = cy + (u - cy - hold) * (y1 - cy) / (y1 - cy - hold);
+    return [q, q];
+  }
   function paint() {
     raf = 0;
     if (!lut) return;
     const wr = world.getBoundingClientRect();
     const target = clamp(innerHeight * 0.64 - wr.top, lut.y0, lut.y1);
-    const prev = curY === null ? target : curY;
     curY = (curY === null || reduce) ? target : curY + (target - curY) * 0.11;
     const moving = Math.abs(target - curY) > 0.8;
-    const i = idxForY(curY), ia = Math.max(0, i - 5), ib = Math.min(lut.xs.length - 1, i + 5);
-    const dx = lut.xs[ib] - lut.xs[ia], dy = curY - prev;
-    if (Math.abs(dy) > 0.05) lastDir = dy > 0 ? 1 : -1;
-    if (Math.abs(dx) > 1) face = (dx * lastDir) >= 0 ? 1 : -1;
+    const [g, b] = place(curY), ig = idxForY(g), ib = idxForY(b);
+    const dG = prevG === null ? 0 : g - prevG, dB = prevB === null ? 0 : b - prevB;
+    prevG = g; prevB = b;
+    if (Math.abs(dG) > 0.05) dirG = dG > 0 ? 1 : -1;
+    if (Math.abs(dB) > 0.05) dirB = dB > 0 ? 1 : -1;
+    const run = i => lut.xs[Math.min(lut.xs.length - 1, i + 5)] - lut.xs[Math.max(0, i - 5)];
+    if (Math.abs(run(ig)) > 1) faceG = (run(ig) * dirG) >= 0 ? 1 : -1;
+    if (Math.abs(run(ib)) > 1) faceB = (run(ib) * dirB) >= 0 ? 1 : -1;
     const s = mobile.matches ? 0.78 : 1;
-    top.style.transform = `translate3d(${lut.xs[i].toFixed(1)}px, ${lut.ys[i].toFixed(1)}px, 0)`;
-    kscale.setAttribute('transform', `scale(${(s * face).toFixed(2)} ${s})`);
-    hicT.setAttribute('transform', face < 0 ? 'translate(26 0) scale(-1 1)' : '');
+    const gx = lut.xs[ig], gy = lut.ys[ig], tr = `translate3d(${gx.toFixed(1)}px, ${gy.toFixed(1)}px, 0)`;
+    top.style.transform = tr; chars.style.transform = tr;
+    kscale.setAttribute('transform', `scale(${(s * faceG).toFixed(2)} ${s})`);
+    bpos.setAttribute('transform', `translate(${(lut.xs[ib] - gx).toFixed(1)} ${(lut.ys[ib] - gy).toFixed(1)})`);
+    bscale.setAttribute('transform', `scale(${(s * faceB).toFixed(2)} ${s})`);
+    bpos.style.opacity = lut.hold ? clamp((curY - lut.cy) / 40, 0, 1).toFixed(2) : '1';   /* she appears once the groom is at the ceremony */
+    hicT.setAttribute('transform', faceG < 0 ? 'translate(26 0) scale(-1 1)' : '');
     asleepG.setAttribute('transform', `translate(${mobile.matches ? 40 : -40} 0) scale(${(s * 1.2).toFixed(2)})`);
-    const t = tAtY(curY);
+    const t = tAtY(g);
     applyTime(t);
     /* the longer the day, the more they have had to drink */
     const dr = clamp((t - 2.7) / 2, 0, 1), dq = dr.toFixed(2);
     if (dq !== lastD) { lastD = dq; couple.style.setProperty('--d', dq); couple.classList.toggle('tipsy', dr > 0.3); couple.classList.toggle('dizzy', dr > 0.75); }
-    const out = curY >= lut.y1 - 14;
+    const out = curY >= lut.y1 - 14, go = moving && !reduce && !out;
     couple.classList.toggle('fall', out);
-    couple.classList.toggle('walking', moving && !reduce && !out);
+    kscale.classList.toggle('walk', go && Math.abs(dG) > 0.05);
+    bscale.classList.toggle('walk', go && Math.abs(dB) > 0.05);
     if (moving) raf = requestAnimationFrame(paint);
   }
   function update() { if (!raf) raf = requestAnimationFrame(paint); }
